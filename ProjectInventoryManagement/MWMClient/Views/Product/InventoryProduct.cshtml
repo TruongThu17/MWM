@@ -1,0 +1,83 @@
+﻿@model IEnumerable<BusinessObject.DTO.InforImportDTO>;
+@{
+    var pagingmodel = new MWMClient.Helper.PagingModel()
+            {
+                currentpage = ViewBag.currentPage,
+                countpages = ViewBag.countPages,
+                generateUrl = (int? c) => Url.Action("InventoryProduct", "Product", new { c = c })
+            };
+
+}
+<style>
+    #notification {
+        position: fixed;
+        bottom: 20px;
+        right: 10px;
+        background-color: lightgreen;
+        color: white;
+        padding: 15px;
+        z-index: 9999;
+    }
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div>
+                    <i class="fa fa-align-justify"></i> Kiểm Kho
+                </div>
+                <div class="row">
+                    <form method="get">
+                        <div class="row">
+                            <input style="width: 200px;" type="text" class="form-control" name="searchString" placeholder="Nhập tên đối tác...">
+                            <button type="submit" class="btn btn-primary mx-3">Tìm kiếm</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Idimport)</th>
+                            <th>@Html.DisplayNameFor(model => model.Idproduct)</th>
+                            <th>@Html.DisplayNameFor(model => model.IdproductNavigation.Name)</th>
+                            <th>@Html.DisplayNameFor(model => model.DateImport)</th>
+                            <th>@Html.DisplayNameFor(model => model.DateExpiry)</th>
+                            <th>@Html.DisplayNameFor(model => model.QuantityImport)</th>
+                            <th>@Html.DisplayNameFor(model => model.QuantityInStock)</th>
+                            <th>@Html.DisplayNameFor(model => model.Shelves)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(itemm => item.Idimport)</td>
+                                <td>@Html.DisplayFor(itemm => item.Idproduct)</td>
+                                <td>@Html.DisplayFor(itemm => item.IdproductNavigation.Name)</td>
+                                <td>@Html.DisplayFor(itemm => item.DateImport)</td>
+                                <td>@Html.DisplayFor(itemm => item.DateExpiry)</td>
+                                <td>@Html.DisplayFor(itemm => item.QuantityImport)</td>
+                                <td>@Html.DisplayFor(itemm => item.QuantityInStock)</td>
+                                <td>@Html.DisplayFor(itemm => item.Shelves)</td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-idImport="@item.Idimport" asp-route-idProduct="@item.Idproduct">Edit</a> |
+                                    <a asp-action="Details" asp-route-idImport="@item.Idimport" asp-route-idProduct="@item.Idproduct">Details</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div id="notification" style="display:none;">Thông báo sẽ được hiển thị ở đây</div>
+                <partial name="_Page" model="@pagingmodel" />
+            </div>
+        </div>
+    </div>
+    <!-- /.col-->
+</div>
+<script>
+
+</script>

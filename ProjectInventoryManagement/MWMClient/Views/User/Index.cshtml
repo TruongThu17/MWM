@@ -1,0 +1,238 @@
+﻿@model IEnumerable<BusinessObject.DTO.UserDTO>;
+@{
+    var pagingmodel = new MWMClient.Helper.PagingModel()
+            {
+                currentpage = ViewBag.currentPage,
+                countpages = ViewBag.countPages,
+                generateUrl = (int? c) => Url.Action("Index", "User", new { c = c })
+            };
+
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div>
+                    <i class="fa fa-align-justify"></i> Danh Sách Người Dùng
+                </div>
+                <div class="row">
+                    <form method="get">
+                        <div class="row">
+                            <input style="width: 200px;" type="text" class="form-control" name="searchString" placeholder="Nhập tên người dùng...">
+                            <button type="submit" class="btn btn-primary mx-3">Tìm kiếm</button>
+                        </div>
+                    </form>
+                    <button type="button" class="btn btn-primary mx-3" data-toggle="modal" data-target="#createModal">
+                        Thêm Mới
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Username)</th>
+                            <th>@Html.DisplayNameFor(model => model.Name)</th>
+                            <th>@Html.DisplayNameFor(model => model.Email)</th>
+                            <th>@Html.DisplayNameFor(model => model.Role)</th>
+                            <th>@Html.DisplayNameFor(model => model.Address)</th>
+                            <th>@Html.DisplayNameFor(model => model.Phone)</th>
+                            <th>@Html.DisplayNameFor(model => model.Status)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(itemm => item.Username)</td>
+                                <td>@Html.DisplayFor(itemm => item.Name)</td>
+                                <td>@Html.DisplayFor(itemm => item.Email)</td>
+                                <td>@Html.DisplayFor(itemm => item.RoleNavigation.Name)</td>
+                                <td>@Html.DisplayFor(itemm => item.Address)</td>
+                                <td>@Html.DisplayFor(itemm => item.Phone)</td>
+                                <td>
+                                    @if (@item.Status == true)
+                                    {
+                                        <p style="color:forestgreen;">Đang hoạt động</p>
+                                    }
+                                    else
+                                    {
+                                        <p style="color:red;">Ngưng hoạt động</p>
+                                    }
+                                </td>
+                                <td>
+                                    <a asp-action="Edit" asp-route-id="@item.Username">Edit</a> |
+                                    <a asp-action="Details" asp-route-id="@item.Username">Details</a>
+                                </td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <partial name="_Page" model="@pagingmodel" />
+            </div>
+        </div>
+    </div>
+    <!-- /.col-->
+</div>
+<!-- Add new Products -->
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createModalLabel">Tạo Tài Khoản </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="username">UserName</label>
+                    <div class="col-md-9">
+                        <input class="form-control mt-3" id="username" name="username" type="text" placeholder="UserName... ">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="name">Họ Và Tên</label>
+                    <div class="col-md-9">
+                        <input class="form-control mt-3" id="name" name="name" type="text" placeholder="Họ Và Tên... ">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="email">Email</label>
+                    <div class="col-md-9">
+                        <input class="form-control mt-3" id="email" name="email" type="text" placeholder="Email... ">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="address">Đại Chỉ</label>
+                    <div class="col-md-9">
+                        <input class="form-control mt-3" id="address" name="address" type="text" placeholder="Địa Chỉ... ">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="phone">Số điện thoại</label>
+                    <div class="col-md-9">
+                        <input class="form-control mt-3" id="phone" name="phone" type="text" placeholder="Số Điện Thoại... ">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="role">Quyền</label>
+                    <div class="col-md-9">
+                        <select class="form-control" id="role" name="role">
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="status">Trạng Thái</label>
+                    <div class="col-md-9">
+                        <select class="form-control" id="status" name="status">
+                            <option value="1">Đang Hoạt Động</option>
+                            <option value="0">Ngưng Hoạt Động</option>
+                        </select>
+                    </div>
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary save_btn">Tạo</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        loadRole();
+    });
+        function loadRole() {
+        $.ajax({
+            url: "http://localhost:5000/api/role",
+            method: 'GET',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result, status, xhr) {
+                if (result != null) {
+                    var select = $('#role');
+                    select.empty(); // Xóa tất cả các option cũ trong select (nếu có)
+
+                    // Lặp qua từng danh mục và thêm option vào select
+                    $.each(result, function (index, pt) {
+                        select.append($('<option></option>')
+                                .attr('value', pt.roleId)
+                            .text(pt.name));
+                    });
+                }
+                else {
+                    window.location.href = "/Error/404";
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr);
+            }
+        });
+    }
+    $(document).on('click', '.save_btn', function () {
+        //Lấy dữ liệu từ các input fields trong form modal
+            var username = $('#username').val();
+            var name = $('#name').val();
+            var status = $('#status').val();
+            if (status == "1") status = true;
+            if (status == "0") status = false;
+            var address = $('#address').val();
+            var email = $('#email').val();
+            var phone = $('#phone').val();
+            var role = parseInt($('#role').val());
+
+        var userDTO = {
+                username: username,
+                name: name,
+                address: address,
+                status: status,
+                email: email,
+                phone: phone,
+                role: role,
+        };
+        // Gửi dữ liệu lên server bằng phương thức get
+        $.ajax({
+            url: "http://localhost:5000/api/user",
+            type: "POST",
+            contentType: "application/json",
+                data: JSON.stringify(userDTO),
+            success: function (result, status, xhr) {
+                // Lấy id từ result và tạo các thẻ td mới để thêm vào bảng
+                var tbody = $("tbody");
+                if (tbody.find("tr").length < 10) {
+                    var newRow = $("<tr>");
+                        newRow.append($("<td>").html(result.username));
+                        newRow.append($("<td>").html(result.name));
+                        newRow.append($("<td>").html(result.email));
+                        newRow.append($("<td>").html(result.address));
+                        newRow.append($("<td>").html(result.phone));
+                        newRow.append($("<td>").html(result.role));
+                    if (result.status == true) {
+                            newRow.append($("<td>").html("Đang Hoạt Động"));
+                    }
+                    if (result.status == false) {
+                            newRow.append($("<td>").html("Ngưng Hoạt Động"));
+                    }
+                    newRow.append(`
+                                      <td>
+                                           <a href="/Edit?id=` + result.username + `">Edit</a> |
+                                           <a href="/Details?id=` + result.username + `">Details</a>
+                                      </td>
+                                            `);
+                    tbody.append(newRow);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log(xhr);
+            }
+
+        });
+        $('#createModal').modal('hide');
+    });
+</script>

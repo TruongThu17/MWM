@@ -1,0 +1,86 @@
+﻿@model IEnumerable<BusinessObject.DTO.BilledDTO>;
+@{
+    var pagingmodel = new MWMClient.Helper.PagingModel()
+            {
+                currentpage = ViewBag.currentPage,
+                countpages = ViewBag.countPages,
+                generateUrl = (int? c) => Url.Action("Billed", "Management", new { c = c })
+            };
+
+}
+<style>
+    #notification {
+        position: fixed;
+        bottom: 20px;
+        right: 10px;
+        background-color: lightgreen;
+        color: white;
+        padding: 15px;
+        z-index: 9999;
+    }
+</style>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <div>
+                    <i class="fa fa-align-justify"></i> Hóa Đơn
+                </div>
+                <div class="row">
+                    <form method="get">
+                        <div class="row">
+                            <input style="width: 200px;" type="text" class="form-control" name="searchString" placeholder="Nhập tên đối tác...">
+                            <button type="submit" class="btn btn-primary mx-3">Tìm kiếm</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.Id)</th>
+                            <th>@Html.DisplayNameFor(model => model.Username)</th>
+                            <th>@Html.DisplayNameFor(model => model.DateImport)</th>
+                            <th>@Html.DisplayNameFor(model => model.IdcustomerNavigation.Name)</th>
+                            <th>@Html.DisplayNameFor(model => model.TotalBill)</th>
+                            <th>@Html.DisplayNameFor(model => model.Status)</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@Html.DisplayFor(itemm => item.Id)</td>
+                                <td>@Html.DisplayFor(itemm => item.Username)</td>
+                                <td>@Html.DisplayFor(itemm => item.DateImport)</td>
+                                <td>@Html.DisplayFor(itemm => item.IdcustomerNavigation.Name)</td>
+                                <td>@Html.DisplayFor(itemm => item.TotalBill)</td>
+                                <td>
+                                    @if (@item.Status == true)
+                                    {
+                                        <p style="color:forestgreen;">Đã Giao</p>
+                                    }
+                                    else
+                                    {
+                                        <p style="color:red;">Chưa Giao</p>
+                                    }
+                                </td>
+                                <td>
+                                    <a asp-action="Details" asp-route-id="@item.Id">Chi Tiết</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div id="notification" style="display:none;">Thông báo sẽ được hiển thị ở đây</div>
+                <partial name="_Page" model="@pagingmodel" />
+            </div>
+        </div>
+    </div>
+    <!-- /.col-->
+</div>
+<script>
+</script>
